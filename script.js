@@ -75,6 +75,20 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+// Computing usernames
+const usernames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(n => n.at(0))
+      .join('');
+  });
+};
+
+usernames(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
