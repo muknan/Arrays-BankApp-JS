@@ -164,3 +164,28 @@ console.log(arr.at(-1)); // easier like slice but no need to spread and supports
 
 console.log('mukul'.at(-1));
 */
+
+// MAP
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const euroToUsd = 1.1;
+
+const convert = movements.map(mov => parseInt(mov * euroToUsd));
+
+const convertFor = [];
+
+movements.forEach(mov => {
+  convertFor.push(parseInt(mov * euroToUsd));
+});
+
+const moveDescp = movements.map(
+  (mov, i) =>
+    `Transaction (${i + 1}): You ${
+      mov < 0 ? 'withdrew' : 'deposited'
+    } ${Math.abs(mov)}`
+);
+
+console.log(movements);
+console.log(convert);
+console.log(convertFor);
+console.log(moveDescp);
