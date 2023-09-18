@@ -75,6 +75,31 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements, interest) {
+  labelSumIn.textContent = `${movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0)}€`;
+
+  labelSumOut.textContent = `${Math.abs(
+    movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0)
+  )}€`;
+
+  labelSumInterest.textContent = `${movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * interest) / 100)
+    .filter(mov => mov >= 1)
+    .reduce((acc, sum) => acc + sum, 0)}€`;
+};
+
+calcDisplaySummary(account1.movements, account1.interestRate);
+
 // Computing usernames
 const usernames = function (accs) {
   accs.forEach(acc => {
@@ -177,7 +202,6 @@ console.log(...arr.slice(-1));
 console.log(arr.at(-1)); // easier like slice but no need to spread and supports chaining
 
 console.log('mukul'.at(-1));
-*/
 
 // MAP
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
@@ -203,3 +227,38 @@ console.log(movements);
 console.log(convert);
 console.log(convertFor);
 console.log(moveDescp);
+
+// FILTER
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const deposits = movements.filter(mov => mov > 0);
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(deposits);
+console.log(withdrawals);
+
+// REDUCE
+// sum is an accumalator(snowball) that collects the value from each loop for next iteration
+const balance = movements.reduce((sum, curr) => sum + curr, 0); // 0 (second argument is initial value of sum)
+console.log(balance);
+
+
+// Maximum value
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const max = movements.reduce(
+  (acc, mov) => (mov > acc ? mov : acc),
+  movements[0]
+);
+console.log(max);
+///////////////////////////////////////////
+// ---------- CHALLENGE 2 & 3 ---------- //
+///////////////////////////////////////////
+
+const calcAverageHumanAge = function (ages) {
+  const dogToHumanAge = ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age > 18)
+    .reduce((acc, age, key, arr) => acc + age / arr.length, 0);
+  return dogToHumanAge;
+};
+
+console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
+*/
