@@ -432,3 +432,73 @@ const maxSubarraySum = function (arr, num) {
 };
 
 // console.log(maxSubarraySum([2, 6, 9, 2, 1, 8, 5, 6, 3], 3));
+
+const sameFrequency = function (n1, n2) {
+  const lookup = {};
+
+  if (`${n1}`.length !== `${n2}`.length) {
+    return false;
+  }
+
+  for (let n of `${n1}`) {
+    n = Number(n);
+    lookup[n] = ++lookup[n] || 1;
+  }
+
+  for (let n of `${n2}`) {
+    n = Number(n);
+    if (!lookup[n]) {
+      return false;
+    } else {
+      lookup[n]--;
+    }
+    return true;
+  }
+};
+
+// console.log(sameFrequency(1235, 3521));
+
+const areThereDuplicates = function () {
+  let obj = {};
+  for (const a of arguments) {
+    obj[a] = ++obj[a] || 1;
+    if (obj[a] > 1) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// console.log(areThereDuplicates(12, 13, 14, 15, 16, 13));
+
+const averagePair = function (arr, val) {
+  let i = 0;
+  let j = arr.length - 1;
+
+  while (i < j) {
+    if ((arr[i] + arr[j]) / 2 > val) {
+      j--;
+    } else if ((arr[i] + arr[j]) / 2 < val) {
+      i++;
+    } else if ((arr[i] + arr[j]) / 2 === val) {
+      return [arr[i], arr[j]];
+    }
+  }
+};
+
+// console.log(averagePair([1, 2, 3, 4, 5, 6], 3));
+
+const isSubsequence = function (s, t) {
+  let i = 0;
+  for (let j = 0; j < t.length; j++) {
+    if (s[i] === t[j]) {
+      i++;
+      if (i > s.length - 1) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+console.log(isSubsequence('abc', 'azbkojnkzc'));
