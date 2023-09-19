@@ -73,14 +73,11 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} EUR`;
 };
-
-calcDisplayBalance(account1.movements);
 
 const calcDisplaySummary = function (movements, interest) {
   labelSumIn.textContent = `${movements
@@ -98,8 +95,6 @@ const calcDisplaySummary = function (movements, interest) {
     .reduce((acc, sum) => acc + sum, 0)}€`;
 };
 
-calcDisplaySummary(account1.movements, account1.interestRate);
-
 // Computing usernames
 const usernames = function (accs) {
   accs.forEach(acc => {
@@ -112,11 +107,36 @@ const usernames = function (accs) {
 };
 
 usernames(accounts);
-console.log(accounts);
+// console.log(accounts);
+
+// Event Handlers
+let currentAccount;
+btnLogin.addEventListener('click', function (event) {
+  event.preventDefault(); // Prevent form from submitting (reload after button press)
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and welcome message
+    containerApp.style.cssText = `opacity: 1`;
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    // Display Movements
+    displayMovements(currentAccount.movements);
+
+    // Display Balance
+    calcDisplayBalance(currentAccount.movements);
+
+    // Display Summary
+    calcDisplaySummary(currentAccount.movements, currentAccount.interestRate);
+  }
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /*
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
@@ -261,4 +281,109 @@ const calcAverageHumanAge = function (ages) {
 };
 
 console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
+
+// FIND
+// Unlike filter, find method only returns the first element that satisfies the condition
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(find);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+// FIND using (for of)
+let acc1;
+for (const acc of accounts) {
+  if (acc.owner === 'Jessica Davis') {
+    acc1 = acc;
+  }
+}
+console.log(acc1);
+
+// FIND using filter method
+const acc2 = accounts.filter(acc => acc.owner === 'Jessica Davis');
+console.log(...acc2);
+
+
+let a = [3, 7, 5, 6, 2];
+let a1;
+let max = [];
+const un = a;
+function subsetA(arr) {
+  let a1 = arr[0];
+  for (let i = 0; i < arr.length; i++) {
+    if (a1 < arr[i]) {
+      a1 = arr[i];
+    }
+  }
+  let b = arr.filter(ar => ar == a1);
+  if (b.length > 1) {
+    a = arr.filter(ar => ar !== a1);
+  } else {
+    a = arr.filter(ar => ar !== a1);
+    max.unshift(a1);
+  }
+}
+
+while (max.length < 3) {
+  subsetA(a);
+}
+
+function arrSum(arr) {
+  return arr.reduce((acc, sum) => acc + sum, 0);
+}
+
+function otherArr(arr) {
+  let s = arr;
+  for (let i = 0; i < max.length; i++) {
+    s = s.filter(ar => ar !== max[i]);
+  }
+  return s;
+}
+
+const other = otherArr(un);
+
+console.log(arrSum(max));
+console.log(arrSum(other));
+
+// if (arrSum(max) > arrSum()) {
+//   console.log('Hurray!');
+// }
 */
+
+// const same = function (arr1, arr2) {
+//   let flag = true;
+//   for (const e of arr1) {
+//     if (arr2.includes(e * e)) {
+//       let index = arr2.indexOf(e * e);
+//       arr2.splice(index, 1);
+//       flag = true;
+//     } else {
+//       flag = false;
+//       break;
+//     }
+//   }
+//   return flag;
+// };
+
+// console.log(same([1, 1, 2], [4, 1, 1]));
+
+// Anagram
+const validAnagram = function (str, ana) {
+  const lookup = {};
+
+  if (str.length !== ana.length) return false;
+
+  for (const s of str) {
+    lookup[s] = ++lookup[s] || 1;
+  }
+  for (const a of ana) {
+    if (!lookup[a]) {
+      return false;
+    } else {
+      lookup[a]--;
+    }
+  }
+  return true;
+};
+
+console.log(validAnagram('anagramb', 'ambanrga'));
