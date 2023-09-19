@@ -348,7 +348,6 @@ console.log(arrSum(other));
 // if (arrSum(max) > arrSum()) {
 //   console.log('Hurray!');
 // }
-*/
 
 // const same = function (arr1, arr2) {
 //   let flag = true;
@@ -387,3 +386,49 @@ const validAnagram = function (str, ana) {
 };
 
 console.log(validAnagram('anagramb', 'ambanrga'));
+*/
+
+const sumZero = function (arr) {
+  let start = 0;
+  let end = arr.length - 1;
+
+  while (start < end) {
+    let sum = arr[start] + arr[end];
+    if (sum === 0) {
+      return [arr[start], arr[end]];
+    } else {
+      sum > 0 ? end-- : start++;
+    }
+  }
+};
+
+// console.log(sumZero([-4, -3, -2, -1, 0, 1, 2, 5]));
+
+const countUniqueValues = function (arr) {
+  let i = 0;
+  for (let j = 1; j < arr.length; j++) {
+    if (arr[i] !== arr[j]) {
+      i++;
+      arr[i] = arr[j];
+    }
+  }
+  return i + 1;
+};
+
+// console.log(countUniqueValues([1, 1, 2, 2, 3, 4, 4, 4, 7, 7]));
+
+const maxSubarraySum = function (arr, num) {
+  let maxSum = 0;
+  let tempSum = 0;
+  for (let i = 0; i < num; i++) {
+    maxSum += arr[i];
+  }
+  tempSum = maxSum;
+  for (let i = num; i < arr.length; i++) {
+    tempSum = tempSum - arr[i - num] + arr[i];
+    maxSum = Math.max(maxSum, tempSum);
+  }
+  return maxSum;
+};
+
+// console.log(maxSubarraySum([2, 6, 9, 2, 1, 8, 5, 6, 3], 3));
