@@ -501,4 +501,106 @@ const isSubsequence = function (s, t) {
   return false;
 };
 
-console.log(isSubsequence('abc', 'azbkojnkzc'));
+// console.log(isSubsequence('abc', 'azbkojnkzc'));
+
+const minSubArrayLen = function (arr, n) {
+  let l = 0;
+  let r = 0;
+  let res = arr.length + 1;
+  let sum = 0;
+
+  while (l < arr.length) {
+    if (sum < n && r < arr.length) {
+      sum += arr[r];
+      r++;
+    } else if (sum >= n) {
+      res = Math.min(res, r - l);
+      sum -= arr[l];
+      l++;
+    } else {
+      break;
+    }
+  }
+  return res === arr.length + 1 ? 0 : res;
+};
+
+// console.log(minSubArrayLen([1, 3, 5, 4, 3, 2, 4], 12));
+
+const longestSubstring = function (str) {
+  let longest = 0;
+  const seen = {};
+  let start = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    let char = str[i];
+    if (seen[char]) {
+      start = Math.max(start, seen[char]);
+    }
+    longest = Math.max(longest, i - start + 1);
+    seen[char] = i + 1;
+  }
+  return longest;
+};
+
+// console.log(longestSubstring('xyxyzax'));
+
+// Recursion
+
+const factRec = function (num) {
+  if (num <= 1) {
+    return 1;
+  }
+  return num * factRec(num - 1);
+};
+// console.log(factRec(5));
+
+// Recursion helper method
+
+const collectOdd = function (arr) {
+  let odd = [];
+
+  function helper(help) {
+    if (help.length === 0) {
+      return;
+    }
+    if (help[0] % 2 !== 0) {
+      odd.push(help[0]);
+    }
+    helper(help.slice(1));
+  }
+
+  helper(arr);
+  return odd;
+};
+
+// Pure recursive way
+const collectOddPure = function (arr) {
+  let odd = [];
+  if (arr.length === 0) {
+    return odd;
+  }
+  if (arr[0] % 2 !== 0) {
+    odd.push(arr[0]);
+  }
+  odd = odd.concat(collectOddPure(arr.slice(1)));
+  return odd;
+};
+
+// console.log(collectOddPure([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+
+const power = function (num, pow) {
+  if (pow === 0) {
+    return 1;
+  }
+  return num * power(num, pow - 1);
+};
+// console.log(power(2, 5));
+
+const fact = function (num) {
+  if (num === 0) {
+    return 1;
+  }
+  return num * fact(num - 1);
+};
+
+// console.log(fact(4));
