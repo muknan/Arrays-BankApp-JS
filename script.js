@@ -604,3 +604,171 @@ const fact = function (num) {
 };
 
 // console.log(fact(4));
+
+const productArr = function (arr) {
+  let pr = 1;
+
+  if (arr.length === 0) {
+    return 1;
+  } else {
+    pr = arr[0];
+  }
+  pr = pr * productArr(arr.slice(1));
+  return pr;
+};
+
+// console.log(productArr([3, 12, 5]));
+
+const recursiveRange = function (n) {
+  if (n === 1) {
+    return 1;
+  }
+  return `${n}, ${recursiveRange(n - 1)}`;
+};
+
+// console.log(recursiveRange(5));
+
+let f = 0;
+let s = 1;
+let t = 0;
+const fib = function (n) {
+  if (n > 0) {
+    t = f;
+    f = s;
+    s = f + t;
+    return `${t}  ${fib(n - 1)}`;
+  } else {
+    return '';
+  }
+};
+
+// console.log(fib(10));
+
+const reverse = function (str) {
+  if (str.length === 0) {
+    return 'asd';
+  }
+  return str[str.length - 1] + reverse(str.slice(0, str.length - 1));
+};
+// console.log(reverse('Hello there!'));
+
+const isPalindrome = function (str) {
+  if (str.length === 1) {
+    return true;
+  }
+  if (str.length === 2) {
+    return str[0] === str[1];
+  }
+  if (str[0] === str.slice(-1)) return isPalindrome(str.slice(1, -1));
+  return false;
+};
+
+// console.log(isPalindrome('civic'));
+
+const someRecursive = function (arr, cb) {
+  if (arr.length === 0) {
+    return false;
+  }
+  if (cb(arr[0])) {
+    return true;
+  }
+  return someRecursive(arr.slice(1), cb);
+};
+
+// console.log(someRecursive([2, 12, 10], val => val % 2 !== 0));
+
+const flatten = function (arr) {
+  let ar = [];
+  if (arr.length === 0) {
+    return ar;
+  } else {
+    ar.push(Number([arr[0]].join()));
+  }
+  ar = ar.concat(flatten(arr.slice(1)));
+  return ar;
+};
+
+// console.log(flatten([[[[1]]], 2, [[3]], 4]));
+
+let a = [[[[1]]], 2, [[[[3]]]], 4];
+// console.log(Number(a[2].join()));
+
+const capitalizeFirst = function (str) {
+  let temp = [];
+  if (str.length === 0) {
+    return temp;
+  } else {
+    temp.push(str[0][0].toUpperCase() + str[0].slice(1, str[0].length));
+  }
+  temp = temp.concat(capitalizeFirst(str.slice(1)));
+  return temp;
+};
+
+// console.log(capitalizeFirst(['hello', 'there', 'mukul', 'nanda']));
+
+const nestedEvenSum = function (obj, sum = 0) {
+  for (let key in obj) {
+    if (typeof obj[key] === 'object') {
+      sum += nestedEvenSum(obj[key]);
+    } else if (typeof obj[key] === 'number' && obj[key] % 2 === 0) {
+      sum += obj[key];
+    }
+  }
+  return sum;
+};
+
+const obj2 = {
+  a: 2,
+  b: { b: 2, bb: { b: 3, bb: { b: 2 } } },
+  c: { c: { c: 2 }, cc: 'ball', ccc: 5 },
+  d: 1,
+  e: { e: { e: 2 }, ee: 'car' },
+};
+
+// console.log(nestedEvenSum(obj2));
+
+const capitalizeWords = function (arr) {
+  let words = [];
+  if (arr.length === 1) {
+    return arr[0].toUpperCase();
+  } else {
+    words.push(arr[0].toUpperCase());
+  }
+  words = words.concat(capitalizeWords(arr.slice(1)));
+  return words;
+};
+
+// console.log(capitalizeWords(['mukul', 'nanda']));
+
+const stringify = function (obj, res = '') {
+  for (let key in obj) {
+    if (typeof obj[key] === 'object') {
+      res += stringify(obj[key]);
+    } else if (typeof obj[key] === 'number') {
+      res += obj[key] + ' ';
+    }
+  }
+  return res;
+};
+
+// console.log(stringify(obj2));
+
+const collectStrings = function (obj, res = []) {
+  for (let key in obj) {
+    if (typeof obj[key] === 'object') {
+      res += collectStrings(obj[key]);
+    } else if (typeof obj[key] === 'string' && obj[key].length > 1) {
+      res += obj[key] + ' ';
+    }
+  }
+  return res;
+};
+
+const obj1 = {
+  a: 2,
+  b: { b: 2, bb: { b: 3, bb: { b: 2 } } },
+  c: { c: { c: 2 }, cc: 'ball', ccc: 5 },
+  d: 1,
+  e: { e: { e: 2 }, ee: 'car' },
+};
+console.log(collectStrings(obj1));
