@@ -386,7 +386,6 @@ const validAnagram = function (str, ana) {
 };
 
 console.log(validAnagram('anagramb', 'ambanrga'));
-*/
 
 const sumZero = function (arr) {
   let start = 0;
@@ -772,3 +771,168 @@ const obj1 = {
   e: { e: { e: 2 }, ee: 'car' },
 };
 console.log(collectStrings(obj1));
+
+
+const linearSearch = function (arr, val) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === val) return i;
+  }
+  return -1;
+};
+
+// console.log(linearSearch([1, 2, 3, 4, 5, 6, 7, 8, 9], 9));
+
+// Binary Search
+const binarySearch = function (arr, val) {
+  let left = 0;
+  let right = arr.length - 1;
+  let mid = Math.floor((left + right) / 2);
+
+  while (arr[mid] !== val && left <= right) {
+    if (val > arr[mid]) left = mid + 1;
+    else right = mid - 1;
+    mid = Math.floor((left + right) / 2);
+  }
+  if (arr[mid] === val) {
+    return mid;
+  }
+  return -1;
+};
+
+// console.log(binarySearch([1, 2, 3, 4, 5, 6, 7, 8, 9], 9));
+
+const naiveStr = function (str, s) {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    for (let j = 0; j < s.length; j++) {
+      if (str[i + j] !== s[j]) {
+        break;
+      }
+      if (j === s.length - 1) {
+        count++;
+      }
+    }
+  }
+  return count;
+};
+
+// console.log(naiveStr('zwomgomwomgomg', 'omg'));
+
+const swap = (arr, i1, i2) => ([arr[i1], arr[i2]] = [arr[i2], arr[i1]]);
+
+const bubbleSort = function (arr) {
+  let noSwaps = true;
+  for (let i = arr.length; i > 0; i--) {
+    for (let j = 0; j < i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        swap(arr, j, j + 1);
+        noSwaps = false;
+      }
+    }
+    if (noSwaps) break;
+  }
+  return arr;
+};
+
+// console.log(bubbleSort([10, 5, 12, 7, 2, 8, 19]));
+
+const selectionSort = function (arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let min = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[j] < arr[min]) {
+        min = j;
+      }
+    }
+    if (i !== min) swap(arr, i, min);
+  }
+  return arr;
+};
+
+// console.log(selectionSort([10, 5, 12, 7, 2, 8, 19]));
+
+const insertionSort = function (arr) {
+  let j;
+  for (let i = 1; i < arr.length; i++) {
+    let curr = arr[i];
+    for (j = i - 1; j >= 0 && arr[j] > curr; j--) {
+      arr[j + 1] = arr[j];
+    }
+    arr[j + 1] = curr;
+  }
+  return arr;
+};
+
+// console.log(insertionSort([2, 1, 9, 76, 4]));
+
+const mergeArrays = function (arr1, arr2) {
+  let i = 0;
+  let j = 0;
+  let temp = [];
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      temp.push(arr1[i]);
+      i++;
+    } else if (arr1[i] > arr2[j]) {
+      temp.push(arr2[j]);
+      j++;
+    }
+  }
+  while (i < arr1.length) {
+    temp.push(arr1[i]);
+    i++;
+  }
+  while (j < arr2.length) {
+    temp.push(arr2[j]);
+    j++;
+  }
+  return temp;
+};
+
+// console.log(mergeArrays([1, 10, 50], [2, 5, 20, 45]));
+
+const mergeSort = function (arr) {
+  let mid = Math.floor(arr.length / 2);
+  let left = arr.slice(0, mid);
+  let right = arr.slice(mid);
+
+  if (arr.length <= 1) return arr;
+
+  left = mergeSort(left);
+  right = mergeSort(right);
+
+  return mergeArrays(left, right);
+};
+
+// console.log(mergeSort([5, 2, 1, 6, 45, 12, 3]));
+*/
+
+const swap = (arr, i1, i2) => ([arr[i1], arr[i2]] = [arr[i2], arr[i1]]);
+
+const pivot = function (arr, start = 0, end = arr.length + 1) {
+  let swapIdx = start;
+  let pivot = arr[start];
+  for (let i = start + 1; i < arr.length; i++) {
+    if (pivot > arr[i]) {
+      swapIdx++;
+      swap(arr, swapIdx, i);
+    }
+  }
+  swap(arr, start, swapIdx);
+  return swapIdx;
+};
+
+// console.log(pivot([4, 8, 2, 1, 5, 7, 6, 3]));
+
+const quickSort = function (arr, left = 0, right = arr.length - 1) {
+  if (left < right) {
+    let pivotIdx = pivot(arr, left, right);
+    // left
+    quickSort(arr, left, pivotIdx - 1);
+    // right
+    quickSort(arr, pivotIdx + 1, right);
+  }
+  return arr;
+};
+
+console.log(quickSort([4, 8, 2, 1, 5, 9, 7, 6, 3]));
