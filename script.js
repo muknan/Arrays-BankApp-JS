@@ -905,7 +905,6 @@ const mergeSort = function (arr) {
 };
 
 // console.log(mergeSort([5, 2, 1, 6, 45, 12, 3]));
-*/
 
 const swap = (arr, i1, i2) => ([arr[i1], arr[i2]] = [arr[i2], arr[i1]]);
 
@@ -963,3 +962,4 @@ const intersect = function (arr1, arr2) {
   return [...new Set(arr2)].filter(val => a.has(val));
 };
 console.log(intersect([1, 2, 3, 5], [3, 4, 5]));
+*/
