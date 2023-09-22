@@ -935,4 +935,31 @@ const quickSort = function (arr, left = 0, right = arr.length - 1) {
   return arr;
 };
 
-console.log(quickSort([4, 8, 2, 1, 5, 9, 7, 6, 3]));
+// console.log(quickSort([4, 8, 2, 1, 5, 9, 7, 6, 3]));
+
+const getDigit = function (num, n) {
+  return Math.floor(Math.abs(num) / Math.pow(10, n)) % 10;
+};
+
+const digitCount = function (num) {
+  if (num === 0) return 1;
+  return Math.floor(Math.log10(Math.abs(num))) + 1;
+};
+
+const mostDigits = function (arr) {
+  let max = 0;
+  let s = digitCount(arr[0]);
+  if (arr.length === 1) {
+    return s;
+  }
+  max = Math.max(max, mostDigits(arr.splice(1)));
+  return max;
+};
+
+// console.log(mostDigits([123, 12312, 12, 2222222]));
+
+const intersect = function (arr1, arr2) {
+  const a = new Set(arr1);
+  return [...new Set(arr2)].filter(val => a.has(val));
+};
+console.log(intersect([1, 2, 3, 5], [3, 4, 5]));
