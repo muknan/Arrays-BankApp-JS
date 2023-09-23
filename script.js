@@ -299,51 +299,10 @@ for (const acc of accounts) {
 }
 console.log(acc1);
 
-// FIND using filter method
-const acc2 = accounts.filter(acc => acc.owner === 'Jessica Davis');
-console.log(...acc2);
 
-
-let a = [3, 7, 5, 6, 2];
-let a1;
-let max = [];
-const un = a;
-function subsetA(arr) {
-  let a1 = arr[0];
-  for (let i = 0; i < arr.length; i++) {
-    if (a1 < arr[i]) {
-      a1 = arr[i];
-    }
-  }
-  let b = arr.filter(ar => ar == a1);
-  if (b.length > 1) {
-    a = arr.filter(ar => ar !== a1);
-  } else {
-    a = arr.filter(ar => ar !== a1);
-    max.unshift(a1);
-  }
-}
-
-while (max.length < 3) {
-  subsetA(a);
-}
-
-function arrSum(arr) {
-  return arr.reduce((acc, sum) => acc + sum, 0);
-}
-
-function otherArr(arr) {
-  let s = arr;
-  for (let i = 0; i < max.length; i++) {
-    s = s.filter(ar => ar !== max[i]);
-  }
-  return s;
-}
-
-const other = otherArr(un);
-
-console.log(arrSum(max));
-console.log(arrSum(other));
+///////////////////////////////////////////
+// ---------- Data Structures ---------- //
+///////////////////////////////////////////
 
 // if (arrSum(max) > arrSum()) {
 //   console.log('Hurray!');
@@ -366,6 +325,27 @@ console.log(arrSum(other));
 
 // console.log(same([1, 1, 2], [4, 1, 1]));
 
+// Same elements - Refactored (check if second array has power of 2 of elements in first array)
+const sameRef = function (arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  let f1 = {};
+  let f2 = {};
+  for (let val of arr1) {
+    f1[val] = (f1[val] || 0) + 1;
+  }
+  for (let val of arr2) {
+    f2[val] = (f2[val] || 0) + 1;
+  }
+  for (let key in f1) {
+    if (!(key ** 2 in f2)) return false; // check if key is present
+    if (f2[key ** 2] !== f1[key]) return false; // check value/freq of key
+  }
+  return true;
+};
+console.log(sameRef([1, 2, 2, 1], [1, 1, 4, 4]));
+
 // Anagram
 const validAnagram = function (str, ana) {
   const lookup = {};
@@ -384,7 +364,6 @@ const validAnagram = function (str, ana) {
   }
   return true;
 };
-
 console.log(validAnagram('anagramb', 'ambanrga'));
 
 const sumZero = function (arr) {
@@ -400,7 +379,6 @@ const sumZero = function (arr) {
     }
   }
 };
-
 // console.log(sumZero([-4, -3, -2, -1, 0, 1, 2, 5]));
 
 const countUniqueValues = function (arr) {
@@ -413,7 +391,6 @@ const countUniqueValues = function (arr) {
   }
   return i + 1;
 };
-
 // console.log(countUniqueValues([1, 1, 2, 2, 3, 4, 4, 4, 7, 7]));
 
 const maxSubarraySum = function (arr, num) {
@@ -429,7 +406,6 @@ const maxSubarraySum = function (arr, num) {
   }
   return maxSum;
 };
-
 // console.log(maxSubarraySum([2, 6, 9, 2, 1, 8, 5, 6, 3], 3));
 
 const sameFrequency = function (n1, n2) {
@@ -467,7 +443,6 @@ const areThereDuplicates = function () {
   }
   return false;
 };
-
 // console.log(areThereDuplicates(12, 13, 14, 15, 16, 13));
 
 const averagePair = function (arr, val) {
@@ -484,11 +459,11 @@ const averagePair = function (arr, val) {
     }
   }
 };
-
 // console.log(averagePair([1, 2, 3, 4, 5, 6], 3));
 
 const isSubsequence = function (s, t) {
   let i = 0;
+  if(s.length===0){return true}
   for (let j = 0; j < t.length; j++) {
     if (s[i] === t[j]) {
       i++;
@@ -544,7 +519,6 @@ const longestSubstring = function (str) {
 // console.log(longestSubstring('xyxyzax'));
 
 // Recursion
-
 const factRec = function (num) {
   if (num <= 1) {
     return 1;

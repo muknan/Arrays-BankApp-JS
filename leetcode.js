@@ -133,3 +133,66 @@ var reverseList = function (head) {
   }
   return prev;
 };
+
+// Group Anagrams
+const groupAna = function (strs) {
+  const sortedArrs = strs.map(word => word.split('').sort().join(''));
+  const res = {};
+  let i = 0;
+  for (let i = 0; i < strs.length; i++) {
+    if (!res[sortedArrs[i]]) {
+      res[sortedArrs[i]] = strs[i];
+    } else {
+      res[sortedArrs[i]].push(strs[i]);
+    }
+  }
+  return res.values;
+};
+
+// Intersection of arrays
+const intersectArr = function (arr1, arr2) {
+  let res = new Map();
+  for (const a of arr1) {
+    if (!res.has(a)) {
+      res.set(a, 1);
+    }
+  }
+  return arr2.filter(n => {
+    if (res.has(n)) {
+      res.delete(n);
+      return true;
+    } else {
+      return false;
+    }
+  });
+};
+let nums1 = [4, 9, 5];
+let nums2 = [9, 4, 9, 8, 4];
+// console.log(intersectArr(nums1, nums2));
+
+// First unique char in a string
+const firstUni = function (str) {
+  let res = {};
+  let k;
+  for (const key of str) {
+    res[key] = ++res[key] || 1;
+  }
+  for (key in res) {
+    if (res[key] === 1) {
+      k = key;
+      break;
+    }
+  }
+  return k ? str.indexOf(k) : -1;
+};
+
+// console.log(firstUni('leetcode'));
+
+const searchInsert = function (arr, t) {
+  if (arr.length === 0) {
+    return 0;
+  }
+  for (let i = 0; i < arr.length; i++) {}
+};
+
+console.log(searchInsert([1, 3, 5, 6], 2));
