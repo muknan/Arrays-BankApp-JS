@@ -60,6 +60,7 @@ const labelSumIn = document.querySelector('.summary__value--in');
 const labelSumOut = document.querySelector('.summary__value--out');
 const labelSumInterest = document.querySelector('.summary__value--interest');
 const labelTimer = document.querySelector('.timer');
+const labelLogout = document.querySelector('.logout-timer');
 
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
@@ -81,6 +82,32 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+const logoutTimer = () => {
+  const tick = function () {
+    const min = `${Math.trunc(now / 60)}`.padStart(2, 0);
+    const sec = `${now % 60}`.padStart(2, 0);
+    // Each call, print remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
+    labelLogout.style.opacity = 100;
+
+    // When time runs out - logout user
+    if (now === 0) {
+      clearInterval(out);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = 'Log in to get started';
+    }
+
+    now--;
+  };
+  // Set time to 5 minutes
+  let now = 600;
+  // Call timer every second
+  tick();
+
+  const out = setInterval(tick, 1000);
+  return out;
+};
+
 const formatCurr = function (value, locale, currency) {
   const formattedMov = new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -95,7 +122,6 @@ const formatMovementDate = function (now, locale) {
     Math.round(Math.abs((date2 - date1) / (24 * 60 * 60 * 1000)));
 
   const daysPassed = calcDaysPassed(new Date(), now);
-  console.log(daysPassed);
 
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
@@ -196,12 +222,12 @@ const updateUI = function (acc) {
 
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, out;
 
 // FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // Experimenting API
 // const now = new Date();
@@ -231,6 +257,7 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
+
     containerApp.style.opacity = 100;
 
     // const now = new Date();
@@ -262,6 +289,9 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    if (out) clearInterval(out);
+    out = logoutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -290,6 +320,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // Reset timer
+    clearInterval(out);
+    out = logoutTimer();
   }
 });
 
@@ -300,12 +334,18 @@ btnLoan.addEventListener('click', function (e) {
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      currentAccount.movements.push(amount);
 
-    currentAccount.movementsDates.push(new Date().toISOString());
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+
+      // Reset timer
+      clearInterval(out);
+      out = logoutTimer();
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -489,7 +529,6 @@ console.log(Date.now());
 
 future.setFullYear(2040); // Also has setMonth(), setDate() and others...
 console.log(future);
-*/
 
 const num = 492398720.5;
 const options = {
@@ -506,3 +545,23 @@ console.log(
   'Browser:',
   new Intl.NumberFormat(navigator.language, options).format(num)
 );
+
+// setTimeout
+const pizzaToppings = ['mushrooms 🍄', 'jalapeno 🥒'];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here's your pizza 🍕 with ${ing1} and ${ing2}`),
+  2000,
+  ...pizzaToppings
+);
+
+if (pizzaToppings.includes('jalapeno 🥒')) clearTimeout(pizzaTimer);
+
+// setTimeInterval
+setInterval(() => {
+  const now = new Date();
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const sec = now.getSeconds();
+  console.log(`${hour}:${min}:${sec}`);
+}, 1000);
+*/
