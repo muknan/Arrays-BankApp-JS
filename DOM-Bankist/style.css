@@ -418,6 +418,9 @@ h4 {
   width: 5.5rem;
   font-size: 3.25rem;
   cursor: pointer;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
 }
 
 .slider__btn--left {
