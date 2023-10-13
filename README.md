@@ -1,6 +1,6 @@
 # Arrays-BankApp-JS
 
-DOM layout using JS:
+Dynamic layout using JS:
 id/pin: js/1111, jd/2222
 https://bankappmukul.netlify.app
 
