@@ -324,4 +324,121 @@ class PersonCl {
     console.dir(this);
   }
 }
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    // Always needs to happen first!
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(
+      `Hello, my name is ${this.fullName} and I study ${this.course}.`
+    );
+  }
+
+  calcAge() {
+    console.log(
+      `I am ${
+        2023 - this.birthYear
+      } years old, but as a student I feel more like ${
+        2023 - this.birthYear + 10
+      }`
+    );
+  }
+}
+
+// const martha = new StudentCl('Martha Jones', 2012);
+
+const martha = new StudentCl('Martha Jones', 2012, 'Computer Science');
+martha.introduce();
+martha.calcAge();
+
+// Inheritance - Object.create
+const PersonProto = {
+  calcAge() {
+    console.log(2023 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steve = Object.create(PersonProto);
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+const yuji = Object.create(StudentProto);
+
+yuji.introduce = function () {
+  console.log(
+    `Hello, my name is ${this.firstName} and I study ${this.course}.`
+  );
+};
+
+yuji.init('Yuji', 2005, 'Computer Science');
+yuji.calcAge();
+yuji.introduce();
 */
+
+class Account {
+  // 1) Public fields (instances)
+  locale = navigator.language;
+
+  // 2) Private fields
+  #movements = [];
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+
+    // protected property
+    this._pin = pin;
+    // this._movements = [];
+    // this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account with us ${this.owner}`);
+  }
+
+  getMovements() {
+    return this.#movements;
+  }
+
+  // Public interface
+  deposit(val) {
+    this.#movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  _approveLoan(val) {
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+}
+
+const acc1 = new Account('Robert', 'EUR', '1111');
+
+// acc1.movements.push(200);
+// acc1.movements.push(-150);
+acc1.deposit(200);
+acc1.withdraw(150);
+acc1.requestLoan(1000);
+// acc1.approveLoan(1000);
+console.log(acc1.getMovements());
+
+console.log(acc1);
