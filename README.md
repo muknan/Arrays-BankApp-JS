@@ -1,8 +1,8 @@
 # Arrays-BankApp-JS
 
-Dynamic layout using JS:<br>
-id/pin: js/1111, jd/2222
+<h2>Dynamic layout using JS:</h2><br>
+id/pin: js/1111, jd/2222<br>
 https://bankappmukul.netlify.app
 
-Landing page for a modern banking service:<br>
+<h2>Landing page for a modern banking service:</h2><br>
 https://bankdommukul.netlify.app
