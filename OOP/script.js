@@ -107,6 +107,69 @@ tesla.chargeBattery(100);
 tesla.accelerate();
 */
 
+///////////////////////////////////////
+// ---------- Challenge 3 ---------- //
+///////////////////////////////////////
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(this.speed);
+  }
+
+  brake() {
+    this.speed -= 5;
+    console.log(this.speed);
+    return this;
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(s) {
+    this.speed = s * 1.6;
+  }
+}
+
+// Inheritance in ES6 class
+
+class EVCl extends CarCl {
+  #charge;
+
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `Tesla going at ${this.speed} km/h, with a charge of ${this.#charge}%`
+    );
+    return this;
+  }
+}
+
+const tesla = new EVCl('Tesla', 120, 23);
+// tesla.accelerate();
+// tesla.brake();
+// tesla.chargeBattery(100);
+// tesla.accelerate();
+
+tesla.accelerate().chargeBattery(100).brake().accelerate();
+
 /*
 const Person = function (firstName, birthYear) {
   // Instance properties
@@ -385,49 +448,59 @@ yuji.introduce = function () {
 yuji.init('Yuji', 2005, 'Computer Science');
 yuji.calcAge();
 yuji.introduce();
-*/
+
 
 class Account {
   // 1) Public fields (instances)
   locale = navigator.language;
 
-  // 2) Private fields
+  // 2) Private fields (instances)
   #movements = [];
+  #pin;
 
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
 
     // protected property
-    this._pin = pin;
+    this.#pin = pin;
     // this._movements = [];
     // this.locale = navigator.language;
 
     console.log(`Thanks for opening an account with us ${this.owner}`);
   }
 
+  // 3) Public methods
+  // Public interface
   getMovements() {
     return this.#movements;
   }
 
-  // Public interface
   deposit(val) {
     this.#movements.push(val);
+    return this;
   }
 
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
 
-  _approveLoan(val) {
+  // 4) Private methods
+  #approveLoan(val) {
     return true;
   }
 
   requestLoan(val) {
-    if (this._approveLoan(val)) {
+    if (this.#approveLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved`);
+      return this;
     }
+  }
+
+  static helper() {
+    console.log('Testing out static method');
   }
 }
 
@@ -440,5 +513,13 @@ acc1.withdraw(150);
 acc1.requestLoan(1000);
 // acc1.approveLoan(1000);
 console.log(acc1.getMovements());
-
 console.log(acc1);
+// console.log(acc1.#movements);
+// console.log(acc1.#pin);
+// console.log(acc1.#approveLoan);
+Account.helper();
+
+// Chaining
+acc1.deposit(300).deposit(500).withdraw(150).requestLoan(1500).withdraw(125);
+console.log(acc1.getMovements());
+*/
