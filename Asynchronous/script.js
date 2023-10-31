@@ -1,5 +1,34 @@
 'use strict';
 
+// Challenge 1
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat}, ${lng}?geoit=json`)
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Invalid Coordinates. Status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (data.city === 'Throttled! See geocode.xyz/pricing')
+        throw new Error('Passed limit on API calls!');
+      else console.log(data.city);
+
+      const prov = data.prov;
+      if (!prov) throw new Error('Invalid country code');
+      return fetch(`https://restcountries.com/v3.1/alpha/${prov}`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+      return response.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err => console.error(`${err.message} 😟😥`));
+};
+
+whereAmI(20.5937, 78.9629);
+
+//
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
@@ -74,19 +103,59 @@ const getCountryAndNeighbour = function (country) {
 // req.send();
 
 // Newer way - fetch, promises
+
+const getJSON = function (url, err = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${err} (${response.status})`);
+    return response.json();
+  });
+};
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(response => {
+//       if (!response.ok)
+//         throw new Error(`Country not found (${response.status})`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderCountry(data[0]);
+
+//       // Getting neigbour
+//       // const neighbour = data[0].borders?.[0];
+//       const neighbour = 'Gotham';
+//       if (!neighbour) return;
+//       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     })
+//     .then(response => {
+//       if (!response.ok)
+//         throw new Error(`Country not found (${response.status})`);
+//       return response.json();
+//     })
+//     .then(data => renderCountry(data[0], 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err} 🎆🎆🎆`);
+//       renderError(`Something went wrong 😟😥 ${err.message}. Try again!`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
 const getCountryData = function (country) {
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(response => response.json())
+  getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
     .then(data => {
       renderCountry(data[0]);
 
       // Getting neigbour
       const neighbour = data[0].borders?.[0];
-      if (!neighbour) return;
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+      if (!neighbour) throw new Error('No neighbour found');
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        'Country not found'
+      );
     })
-    .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour'))
+    .then(data => renderCountry(data, 'neighbour'))
     .catch(err => {
       console.error(`${err} 🎆🎆🎆`);
       renderError(`Something went wrong 😟😥 ${err.message}. Try again!`);
@@ -98,7 +167,7 @@ const getCountryData = function (country) {
 
 btn.addEventListener('click', function () {
   countriesContainer.innerHTML = '';
-  getCountryData('germany');
+  getCountryData('australia');
 });
 
-getCountryData('Gotham');
+// getCountryData('Gotham');
