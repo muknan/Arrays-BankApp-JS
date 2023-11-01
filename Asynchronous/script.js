@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 // Challenge 1
 const whereAmI = function (lat, lng) {
   fetch(`https://geocode.xyz/${lat}, ${lng}?geoit=json`)
@@ -27,6 +28,7 @@ const whereAmI = function (lat, lng) {
 };
 
 whereAmI(20.5937, 78.9629);
+*/
 
 //
 const btn = document.querySelector('.btn-country');
@@ -171,3 +173,28 @@ btn.addEventListener('click', function () {
 });
 
 // getCountryData('Gotham');
+
+/*
+console.log('Test START');
+setTimeout(() => {
+  console.log('0 sec timer');
+}, 0);
+Promise.resolve('Resolved promise 1').then(res => console.log(res));
+
+Promise.resolve('Resolved promise 2').then(res => {
+  for (let i = 0; i < 10000000000; i++) {}
+  console.log(res);
+});
+
+console.log('Test END');
+*/
+
+const lottery = new Promise(function (resolve, reject) {
+  if (Math.random() >= 0.5) {
+    resolve('You win! 💰');
+  } else {
+    reject('You lost your money 💩');
+  }
+});
+
+lottery.then(r => console.log(r)).catch(e => console.error(e));
