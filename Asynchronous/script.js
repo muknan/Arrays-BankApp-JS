@@ -30,6 +30,53 @@ const whereAmI = function (lat, lng) {
 whereAmI(20.5937, 78.9629);
 */
 
+// Challenge 2
+
+const wait = function (sec) {
+  return new Promise(function (res) {
+    setTimeout(res, sec * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (res, rej) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      res(img);
+    });
+
+    img.addEventListener('error', function () {
+      rej(new Error('Image not found'));
+    });
+  });
+};
+
+let currentImg;
+createImage('img/img-1.jpg')
+  .then(img => {
+    currentImg = img;
+    console.log('Image 1 loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    console.log('Image 1 hidden');
+    return createImage('img/img-2.jpg');
+  })
+  .then(img => {
+    currentImg = img;
+    console.log('Image 2 loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    console.log('Image 2 hidden');
+  })
+  .catch(err => console.error(err));
+
 //
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
@@ -187,14 +234,89 @@ Promise.resolve('Resolved promise 2').then(res => {
 });
 
 console.log('Test END');
-*/
+
 
 const lottery = new Promise(function (resolve, reject) {
-  if (Math.random() >= 0.5) {
-    resolve('You win! 💰');
-  } else {
-    reject('You lost your money 💩');
-  }
+  console.log('Lottery draw in progress...');
+  setTimeout(() => {
+    if (Math.random() >= 0.5) {
+      resolve('You win! 💰');
+    } else {
+      reject(new Error('You lost your money 💩'));
+    }
+  }, 2000);
 });
 
 lottery.then(r => console.log(r)).catch(e => console.error(e));
+
+// Promisifying setTimeout
+const wait = function (sec) {
+  return new Promise(function (res) {
+    setTimeout(res, sec * 1000);
+  });
+};
+
+// Promise chain
+wait(1)
+  .then(() => {
+    console.log('1 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('2 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('3 second passed');
+    return wait(1);
+  })
+  .then(() => console.log('4 second passed'));
+
+Promise.resolve('Test: resolve').then(x => console.log(x));
+Promise.reject('Test: reject').catch(x => console.error(x));
+
+
+const getPosition = function () {
+  return new Promise(function (res, rej) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => res(position),
+    //   error => rej(error)
+    // );
+    navigator.geolocation.getCurrentPosition(res, rej);
+  });
+};
+
+//
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Invalid Coordinates. Status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (data.city === 'Throttled! See geocode.xyz/pricing')
+        throw new Error('Passed limit on API calls!');
+      else console.log(data.city);
+
+      const prov = data.prov;
+      console.log(prov);
+      if (!prov) throw new Error('Invalid country code');
+      return fetch(`https://restcountries.com/v3.1/alpha/${prov}`);
+    })
+    .then(response => {
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+      return response.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err => console.error(`${err.message} 😟😥`));
+};
+
+btn.addEventListener('click', whereAmI);
+*/
