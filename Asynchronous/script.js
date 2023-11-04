@@ -28,10 +28,8 @@ const whereAmI = function (lat, lng) {
 };
 
 whereAmI(20.5937, 78.9629);
-*/
 
 // Challenge 2
-
 const wait = function (sec) {
   return new Promise(function (res) {
     setTimeout(res, sec * 1000);
@@ -76,6 +74,7 @@ createImage('img/img-1.jpg')
     console.log('Image 2 hidden');
   })
   .catch(err => console.error(err));
+  */
 
 //
 const btn = document.querySelector('.btn-country');
@@ -84,6 +83,7 @@ const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
 
 const renderCountry = function (data, className = '') {
+  countriesContainer.style.opacity = 1;
   const [lang] = Object.values(data.languages);
   const [curr] = Object.values(data.currencies);
 
@@ -320,3 +320,35 @@ const whereAmI = function () {
 
 btn.addEventListener('click', whereAmI);
 */
+
+const getPosition = function () {
+  return new Promise(function (res, rej) {
+    navigator.geolocation.getCurrentPosition(res, rej);
+  });
+};
+
+// fetch(`https://restcountries.com/v3.1/name/${country}`).then(res =>
+//   console.log(res)
+// );
+//
+const whereAmI = async function (country) {
+  // Geolocation
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  // Reverse geocoding
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+
+  // Country data
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo.country}`
+  );
+  const data = await res.json();
+  console.log(data);
+  renderCountry(data[0]);
+};
+
+whereAmI();
+console.log('FIRST');
