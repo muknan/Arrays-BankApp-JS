@@ -76,6 +76,61 @@ createImage('img/img-1.jpg')
   .catch(err => console.error(err));
   */
 
+// Challenge 3
+const wait = function (sec) {
+  return new Promise(function (res) {
+    setTimeout(res, sec * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+const createImage = function (imgPath) {
+  return new Promise(function (res, rej) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      res(img);
+    });
+
+    img.addEventListener('error', function () {
+      rej(new Error('Image not found'));
+    });
+  });
+};
+
+const loadNPause = async function () {
+  try {
+    let img = await createImage('img/img-1.jpg');
+    if (!img) throw new Error('Image not found');
+    await wait(2);
+    img.style.display = 'none';
+    console.log('Image 1 hidden');
+
+    await wait(2);
+
+    img = await createImage('img/img-2.jpg');
+    if (!img) throw new Error('Image not found');
+    await wait(2);
+    img.style.display = 'none';
+    console.log('Image 2 hidden');
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+// loadNPause();
+
+const loadAll = async function (imgArr) {
+  try {
+    const imgs = imgArr.map(async img => await createImage(img));
+    const imgsEl = await Promise.all(imgs);
+    imgsEl.forEach(i => i.classList.add('parallel'));
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
+
 //
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
@@ -319,7 +374,7 @@ const whereAmI = function () {
 };
 
 btn.addEventListener('click', whereAmI);
-*/
+
 
 const getPosition = function () {
   return new Promise(function (res, rej) {
@@ -363,6 +418,11 @@ console.log('1: Will get location');
 // const city = whereAmI();
 // console.log(city);
 
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(err => console.error(`2: ${err.message} 😿`))
+//   .finally(() => console.log('3: Finished getting location'))
+
 (async function () {
   try {
     const city = await whereAmI();
@@ -373,16 +433,77 @@ console.log('1: Will get location');
   }
   console.log('3: Finished getting location');
 })();
-// whereAmI()
-//   .then(city => console.log(`2: ${city}`))
-//   .catch(err => console.error(`2: ${err.message} 😿`))
-//   .finally(() => console.log('3: Finished getting location'))
 
-//
-// try {
-//   let y = 1;
-//   const x = 2;
-//   y = 4;
-// } catch (err) {
-//   alert(err.message);
-// }
+
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+
+    // console.log([data1.capital, data2.capital, data3.capital]);
+    console.log(data.map(m => m[0].capital));
+  } catch (err) {
+    console.error(`${err.message} 😟`);
+  }
+};
+
+get3Countries('Bharat', 'Canada', 'Japan');
+
+
+// Promise.race
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v3.1/name/italy`),
+    getJSON(`https://restcountries.com/v3.1/name/egypt`),
+    getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  ]);
+
+  console.log(res[0].capital);
+})();
+
+const timeout = function (s) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject(new Error('Request took too long'));
+    }, s * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/canada`),
+  timeout(1),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+// Promise.allSettled
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+]).then(res => console.log(res));
+
+Promise.all([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+
+// Promise.any
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+*/
