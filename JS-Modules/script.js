@@ -1,11 +1,12 @@
+/*
 // importing module
 // import {
 //   addToCart,
 //   totalPrice as price, // Alias in import
-//   qt,
+//   tq,
 // } from './shoppingCart.js'; // imports are always hoisted to the top
 // addToCart('Bread', 5);
-// console.log(price, qt); // Imported from shoppingCart.js
+// console.log(price, tq); // Imported from shoppingCart.js
 
 console.log('Importing module');
 // console.log(shippingCost);
@@ -17,11 +18,11 @@ console.log('Importing module');
 // import add, {
 //   addToCart,
 //   totalPrice as price, // Alias in import
-//   qt,
+//   tq,
 // } from './shoppingCart.js'; // imports default export
-// console.log(price, qt);
+// console.log(price, tq);
 
-import add, { cart } from './shoppingCart.js'; // imports default export
+import add, { cart } from './shoppingCart.js'; // imports default export // !! NOT A GOOD PRACTICE TO MIX DEFAULT AND NAMED EXPORTS !!
 add('Pizza', 2);
 add('Bread', 5);
 add('Apple', 4);
@@ -51,3 +52,58 @@ const getLastPost = async function () {
 
 const lastPost = await getLastPost(); // Top level await
 console.log(lastPost);
+
+
+const ShoppingCart = (function () {
+  const cart = [];
+  const shippingCost = 10;
+  const totalPrice = 237;
+  const totalQuantity = 23;
+
+  const addToCart = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(`${quantity} ${product} added to cart`);
+  };
+
+  const orderStock = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(`${quantity} ${product} ordered from supplier`);
+  };
+
+  return { addToCart, orderStock, cart, totalPrice, totalQuantity };
+})();
+
+ShoppingCart.addToCart('Chips', '4');
+ShoppingCart.addToCart('Milk', '1');
+ShoppingCart.orderStock('Pitas', '10');
+console.log(ShoppingCart);
+console.log(ShoppingCart.shippingCost); // since its not returned in IIFE
+
+// Export
+// Won't work on a browser, but would work on node.js
+export.addToCart= function (product, quantity) {
+  cart.push({ product, quantity });
+  console.log(`${quantity} ${product} added to cart`);
+};
+
+// Import
+const { addToCart } = require('./shoppingCart.js');
+*/
+
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+
+const state = {
+  cart: [
+    { product: 'bread', quantity: 5 },
+    { product: 'pizza', quantity: 5 },
+  ],
+  user: { loggedIn: true },
+};
+
+const stateClone = Object.assign({}, state);
+console.log(stateClone);
+
+const stateDeepClone = cloneDeep(state);
+console.log(stateDeepClone);
+
+state.user.loggedIn = false;

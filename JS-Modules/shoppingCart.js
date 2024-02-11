@@ -20,7 +20,7 @@ const totalQuantity = 23;
 
 export {
   totalPrice,
-  totalQuantity as qt, // Alias in export
+  totalQuantity as tq, // Alias in export
 };
 
 export default function (product, quantity) {
