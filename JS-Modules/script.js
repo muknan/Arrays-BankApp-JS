@@ -90,7 +90,7 @@ export.addToCart= function (product, quantity) {
 const { addToCart } = require('./shoppingCart.js');
 */
 
-import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+import cloneDeep from 'lodash-es';
 
 const state = {
   cart: [
@@ -107,3 +107,7 @@ const stateDeepClone = cloneDeep(state);
 console.log(stateDeepClone);
 
 state.user.loggedIn = false;
+
+if (module.hot) {
+  module.hot.accept(); // Injects only the changes without reloading the entire page
+}
